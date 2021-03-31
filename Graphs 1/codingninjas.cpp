@@ -40,112 +40,37 @@ Sample Output 1:
 
 #include<bits/stdc++.h>
 using namespace std;
-
-bool graph(vector<vector<char>>&board, string name,int n,int m,int i,int j,bool**visited,int stringIndex){
-    visited[i][j]=true;
-    stringIndex++;
+bool ValidIndex(int i,int j,int n,int m){
+    return (i>=0 && i<n && j>=0 &&j<m);
+}
+bool graph(vector<vector<char>> &board, string name,int n,int m,int X,int Y,vector<vector<bool>>&visited,int stringIndex){
+    visited[X][Y]=true;
+    
     if(stringIndex==11){
         return true;
     }
-        //left
-         if(j!=0 && board[i][j-1]==name[stringIndex] && !visited[i][j-1]){
-             bool ans= graph(board,name,n,m,i,j-1,visited,stringIndex);
-             if(ans)
-                 return true;
-             else{
-                 visited[i][j-1]=false;
-                 
-             }
-         }
-        //right
-        if(j!=m-1 && board[i][j+1]== name[stringIndex] && !visited[i][j+1]){
-            bool ans= graph(board,name,n,m,i,j+1,visited,stringIndex);
-            if(ans)
-                 return true;
-             else{
-                 visited[i][j+1]=false;
-                
-             }
+    bool ans = false;
+    int dXdY[8][2] = {{-1,0},{1,0},{0,1},{0,-1},{-1,-1},{-1,1},{1,-1},{1,1}};
+    for(int i=0;i<8;i++){
+        int newX = X +dXdY[i][0];
+        int newY = Y +dXdY[i][1];
+        
+        if(ValidIndex(newX,newY,n,m) && board[newX][newY]==name[stringIndex] && !visited[newX][newY]){
+           ans= ans | graph(board,name,n,m,newX,newY,visited,stringIndex+1);
         }
-        //bottom
-        if(i!=n-1 && board[i+1][j]==name[stringIndex] && !visited[i+1][j]) {
-            bool ans= graph(board,name,n,m,i+1,j,visited,stringIndex);
-            if(ans)
-                 return true;
-             else{
-                 visited[i+1][j]=false;
-                 
-             }
-        }       
-        //up
-        if(i!=0 && board[i-1][j]==name[stringIndex] && !visited[i-1][j]){
-           bool ans = graph(board,name,n,m,i-1,j,visited,stringIndex);
-            if(ans)
-                 return true;
-             else{
-                 visited[i-1][j]=false;
-                 
-             }
-        }
-        //bottomleft
-        if(i!=n-1 && j!=0 && board[i+1][j-1]==name[stringIndex] && !visited[i+1][j-1]){
-            bool ans= graph(board,name,n,m,i+1,j-1,visited,stringIndex);
-            if(ans)
-                 return true;
-             else{
-                 visited[i+1][j-1]=false;
-                 
-                 
-             }
-        }
-        //bottomright
-        if(i!=n-1 && j!=m-1 && board[i+1][j+1]==name[stringIndex] && !visited[i+1][j+1]){
-            bool ans= graph(board,name,n,m,i+1,j+1,visited,stringIndex);
-            if(ans)
-                 return true;
-             else{
-                 visited[i+1][j+1]=false;
-                 
-             }
-        }
-        //upleft
-        if(i!=0 && j!=0 && board[i-1][j-1]==name[stringIndex] && !visited[i-1][j-1]){
-            bool ans= graph(board,name,n,m,i-1,j-1,visited,stringIndex);
-            if(ans)
-                 return true;
-             else{
-                 visited[i-1][j-1]=false;
-                 
-             }
-        }
-        //upright
-        if(i!=0 && j!=m-1 && board[i-1][j+1]==name[stringIndex] && !visited[i-1][j+1]){
-           bool ans= graph(board,name,n,m,i-1,j+1,visited,stringIndex);
-            if(ans)
-                 return true;
-             else{
-                 visited[i-1][j+1]=false;
-                 
-                
-             }
-        }
-   
-    return false;
+        
+    }
+    visited[X][Y]=false;
+    return ans;
+    
 }
 bool hasPath(vector<vector<char>> &board, int n, int m) {
     string name = "CODINGNINJA";
-    bool**visited=new bool*[n];
-    
-    for(int i=0;i<n;i++){
-        visited[i]=new bool[m];
-        for(int j=0;j<m;j++){
-            visited[i][j]=false;
-        }
-    }
+   vector<vector<bool>> visited(n,vector<bool>(m,false));
     for(int i=0;i<n;i++){
         for(int j=0;j<m;j++){
             if(board[i][j]=='C'){
-                bool ans=graph(board,name,n,m,i,j,visited,0);
+                bool ans=graph(board,name,n,m,i,j,visited,1);
                 if(ans){
                     return true;
                 }

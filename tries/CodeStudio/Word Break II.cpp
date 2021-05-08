@@ -55,6 +55,8 @@ We can not make any sentence because after making “god is no” we will be stu
 
 
 
+//Approach 1 - Using Trie
+
 class trieNode{
     public:
     bool isWordComplete;
@@ -111,3 +113,70 @@ vector<string> wordBreak(string &s, vector<string> &dictionary){
     query(root,s,result,"",0);
     return result;
 }
+
+
+
+
+// Approach 2 - Using Recursion
+
+
+#include<bits/stdc++.h>
+using namespace std;
+vector<string> wordBreakHelper(string &s,unordered_set<string>&dictSet,int pos,int size){
+    if(pos==size){
+        return {""};
+    }
+    vector<string> smallAns,output;
+    string word ="";
+    for(int i=pos;i<size;i++){
+        word.push_back(s[i]);
+        if(dictSet.count(word)==0){
+            continue;
+        }
+        smallAns = wordBreakHelper(s,dictSet,i+1,size);
+        
+        for(int j=0;j<smallAns.size();j++){
+            if(smallAns[j].size()!=0){
+                string temp=word;
+                temp.append(" ");
+                temp.append(smallAns[j]);
+                smallAns[j]=temp;
+            }
+            else{
+                smallAns[j]=word;
+            }
+        }
+        for(int i=0;i<smallAns.size();i++){
+            output.push_back(smallAns[i]);
+        }
+    }
+    return output;
+}
+vector<string> wordBreak(string &s, vector<string> &dictionary){
+    
+    unordered_set<string> dictSet;
+    for(int i=0;i<dictionary.size();i++){
+        dictSet.insert(dictionary[i]);
+    }
+    
+   return  wordBreakHelper(s,dictSet,0,s.size());
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

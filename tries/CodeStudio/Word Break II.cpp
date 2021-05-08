@@ -165,7 +165,59 @@ vector<string> wordBreak(string &s, vector<string> &dictionary){
 
 
 
+// Approach 3 - Using Memoisation
 
+
+
+#include<bits/stdc++.h>
+using namespace std;
+vector<string> wordBreakHelper(string &s,unordered_set<string>&dictSet,int pos, map<int,vector<string>> &dp, int size){
+    if(pos==size){
+        return {""};
+    }
+    
+    if (dp.find(pos) != dp.end())
+    {
+        return dp[pos];
+    }
+    vector<string> smallAns,output;
+    string word ="";
+    for(int i=pos;i<size;i++){
+         
+        word.push_back(s[i]);
+        if(dictSet.count(word)==0){
+            continue;
+        }
+        smallAns = wordBreakHelper(s,dictSet,i+1,dp,size);
+        
+        for(int j=0;j<smallAns.size();j++){
+            if(smallAns[j].size()!=0){
+                string temp=word;
+                temp.append(" ");
+                temp.append(smallAns[j]);
+                smallAns[j]=temp;
+            }
+            else{
+                smallAns[j]=word;
+            }
+        }
+        for(int i=0;i<smallAns.size();i++){
+            output.push_back(smallAns[i]);
+        }
+    }
+    dp[pos] = output;
+    return dp[pos];
+}
+vector<string> wordBreak(string &s, vector<string> &dictionary){
+    
+    unordered_set<string> dictSet;
+    for(int i=0;i<dictionary.size();i++){
+        dictSet.insert(dictionary[i]);
+    }
+    map<int,vector<string>> dp;
+   return  wordBreakHelper(s,dictSet,0,dp,s.size());
+    
+}
 
 
 

@@ -85,5 +85,46 @@ vector < int > countSmallerOrEqual(int * a, int * b, int n, int m) {
     return result;
 }
 
+// Optimal Solution 
+// Time Complexity - O(nlogm)
+
+#include<bits/stdc++.h>
+using namespace std;
+int BinarySearch(int* b,int low, int high, int X){
+    if(high<low){
+        return 0;
+    }
+    int mid = low + (high-low)/2;
+    
+    if(b[mid]>X){
+        return BinarySearch(b,low,mid-1,X);
+    }
+    else {
+        return mid-low+1 + BinarySearch(b,mid+1,high,X);
+    }
+    
+}
+vector < int > countSmallerOrEqual(int * a, int * b, int n, int m) {
+    vector<int> result;
+    // Sort array b
+    //Don't sort array a, because it will affect sequence of result.
+    sort(b,b+m);
+    
+   for(int i=0;i<n;i++){
+       // perform binary search for element of array a.
+       int count = BinarySearch(b,0,m-1,a[i]);
+       result.push_back(count);
+   }
+    return result;
+}
+
+
+
+
+
+
+
+
+
 
 

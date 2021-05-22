@@ -175,3 +175,56 @@ int maxSumRectangle(vector<vector<int>>& arr, int n, int m){
     }
     return maxSum;
 }
+
+
+
+
+
+
+
+
+// Time Complexity - O(N*(M^2))
+// Space Complexity - O(N)
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int kadane(int arr[], int n){
+    int maxSum = INT_MIN;
+    int sum = 0;
+    for(int i = 0; i < n; i++){
+        sum += arr[i];
+        
+        maxSum = max(sum, maxSum);
+        
+        if(sum < 0){
+            sum = 0;
+        }
+    
+    }
+    return maxSum;
+}
+int maxSumRectangle(vector<vector<int>>& arr, int n, int m){
+    
+    int maxSum  = INT_MIN;
+    
+    int temp[n];
+    
+    for(int left = 0;left < m; left++){
+        for(int i=0;i<n;i++){
+            temp[i] = 0;
+        }
+        
+        for(int right = left; right < m; right++){
+            for(int i=0;i<n;i++){
+                temp[i] += arr[i][right];
+            }
+            
+            int sum = kadane(temp, n);
+            
+            maxSum = max(sum, maxSum);
+        }
+    }
+    
+    return maxSum;
+}

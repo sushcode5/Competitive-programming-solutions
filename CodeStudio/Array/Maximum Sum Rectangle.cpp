@@ -93,3 +93,85 @@ int maxSumRectangle(vector<vector<int>>& arr, int n, int m)
     }
     return maxSum;
 }
+
+
+
+
+
+
+
+/*
+
+	Time complexity: O((N * M)^2)
+	Space complexity: O(N * M)
+	
+	where N is the number of rows and M is the number of columns in the matrix.
+
+*/
+
+int findSum(int top, int left, int bottom, int right, int n, int m, vector<vector<int>> &prefixSum){
+   
+    int sum = prefixSum[bottom][right];
+    
+    if(left-1>=0){
+        
+        sum -= prefixSum[bottom][left-1];
+    }
+    if(top-1>=0){
+        
+        sum -= prefixSum[top-1][right];
+    }
+    
+    if( (left-1>=0) && (top-1>=0) ){
+        
+        sum += prefixSum[top-1][left-1];
+    }
+    return sum;
+}
+int maxSumRectangle(vector<vector<int>>& arr, int n, int m){
+    
+    vector<vector<int>> prefixSum(n,vector<int>(m,0));
+    //Row Wise Prefix Sum
+    for(int i=0;i<n;i++){
+        
+        for(int j=0;j<m;j++){
+            
+            prefixSum[i][j] = arr[i][j];
+            
+            if(j!=0){
+                
+                prefixSum[i][j] += prefixSum[i][j-1];
+            }
+        }
+    }
+    
+    // Col Wise Prefix Sum
+    for(int j=0;j<m;j++){
+        
+        for(int i=0;i<n;i++){
+            
+            if(i!=0){
+                
+                prefixSum[i][j] += prefixSum[i-1][j];
+            }
+        }
+    }
+    int maxSum = INT_MIN;
+    
+    for(int top = 0;top < n; top++){
+        
+        for(int left = 0; left < m; left++){
+            
+            for(int bottom = top; bottom < n; bottom++){
+                
+                for(int right = left; right < m; right++){
+                    
+                    int sum = findSum(top, left, bottom, right, n, m, prefixSum);
+                    
+                    maxSum = max(maxSum, sum);
+                }
+            }
+        }
+    }
+    return maxSum;
+}

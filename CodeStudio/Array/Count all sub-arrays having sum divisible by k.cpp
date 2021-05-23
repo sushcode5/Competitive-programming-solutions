@@ -92,3 +92,36 @@ int subArrayCount(vector<int> arr, int k) {
     }
     return count;
 }
+
+
+
+
+
+// Optimised Solution
+// Time Complexity - O(N+k)
+// Space Complexity - O(N+K)
+int subArrayCount(vector<int> arr, int k) {
+    int n = arr.size();
+    int count = 0;
+    
+    // Create a prefix sum array
+    int prefixSum[n];
+    prefixSum[0] = arr[0];
+    for(int i=1;i<n;i++){
+        prefixSum[i] = arr[i] + prefixSum[i-1];
+    }
+    
+    vector<int> remArr(k,0);
+    for(int i=0;i<n;i++){
+        int rem = (((prefixSum[i] % k) + k) % k);
+        remArr[rem]++;
+    }
+    
+    for(int i=0;i<k;i++){
+        if(remArr[i] > 1){
+            count += ((remArr[i] * (remArr[i]-1) ) / 2);
+        }
+    }
+    return count+remArr[0];
+}
+

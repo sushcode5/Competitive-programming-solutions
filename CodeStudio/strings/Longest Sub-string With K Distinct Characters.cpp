@@ -58,3 +58,40 @@ int getLengthofLongestSubstring(string s, int k) {
 
 
 // we need to optimised above solution.
+
+// Time Complexity - O(N)
+// Space Complexity - O(1)
+
+//  We solve this problem using sliding window technique
+
+#include<bits/stdc++.h>
+using namespace std;
+int countFreq(vector<int> &freq){
+    int count = 0;
+    
+    for(int i=0;i<26;i++){
+        if(freq[i]){
+            count++;
+        }
+    }
+    return count;
+}
+int getLengthofLongestSubstring(string s, int k) {
+    int n = s.length();
+    int maxLength = 0;
+    
+    vector<int> freq(26,0);
+    int start = 0;
+    for(int i=0;i<n;i++){
+       
+        freq[s[i] - 'a']++;
+        
+        while(countFreq(freq) > k){
+            freq[s[start] - 'a']--;
+            start++;
+        }
+        
+        maxLength = max(maxLength, i-start+1);       
+    }
+    return maxLength;
+}

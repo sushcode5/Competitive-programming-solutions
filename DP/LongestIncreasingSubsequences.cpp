@@ -5,7 +5,7 @@
 */
 
 
-
+// Time Complexity - O(N^2)
 #include <bits/stdc++.h>
 using namespace std;
 int n;
@@ -63,3 +63,70 @@ int main(){
     }
     
 }
+
+
+
+
+
+
+// Time Complexity - O(nlogn)
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int longestIncreasingSubsequence(int arr[], int n, int* &p)
+{
+    int* d = new int[n+1];
+    const int INF = 1e9;
+    for(int i=0;i<=n;i++){
+        d[i] = INF;
+        p[i] = -1;
+    }
+    d[0] = -INF;
+    
+    for(int i=0;i<n;i++){
+        int j = upper_bound(d, d+n+1, arr[i]) - d;
+            if(d[j-1] < arr[i] && arr[i] < d[j]){
+                d[j] = arr[i]; 
+                p[j] = arr[i];
+        }
+    }
+    
+    int ans = 0;
+    for(int i=0;i<=n;i++){
+        if(d[i] < INF){
+            ans = i;
+        }
+    }
+    return ans;
+}
+int main(){
+    int n;
+    cin>>n;
+    int *arr = new int[n];
+    for(int i=0;i<n;i++){
+        cin>>arr[i];
+    }
+    int* p = new int[n+1];
+          
+    // print length of longest increasing subsequences
+    cout<<longestIncreasingSubsequence(arr,n,p)<<endl;
+    
+    // print longest increasing subsequences
+    for(int i=0;i<=n;i++){
+        if(p[i]== -1){
+            continue;
+        }
+        cout<<p[i]<<" ";
+    }
+    return 0;
+}
+
+
+
+
+
+
+
+
+

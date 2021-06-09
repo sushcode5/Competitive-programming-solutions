@@ -54,14 +54,6 @@ Both the elements of Array B are greater than 2. Therefore the answer for the fo
 For the fifth index, A[4]=1
 Both the elements of Array B are greater than 1. Therefore the answer for the last index is 0.
 Hence, the final answer is [2,2,1,0,0] in this case.
-Sample Input 2:
-1
-4
--2 1 3 0
-4
--1 0 2 1
-Sample Output 2:
- 0 3 4 2
 
 */
 

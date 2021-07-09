@@ -1,8 +1,3 @@
-/*
-            Name - Rindhe Sushil Samadhan
-            IIT Guwahati
-            
- */
 
 
 #include <iostream>
@@ -23,14 +18,14 @@ int fib2(int n, int*arr){
     if(arr[n] > 0){
         return arr[n];
     }
-    
+
     int output = fib2(n-1,arr) + fib2(n-2,arr);
     arr[n] = output;
     return arr[n];
 }
 
 int main() {
-	
+
 	int n;
 	cin >> n;
 	int *arr = new int[n]();
